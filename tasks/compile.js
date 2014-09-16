@@ -7,12 +7,21 @@ module.exports = function(grunt) {
         var main = this.data.main;
         var libs = this.data.links;
         var dest = this.data.dest;
-        var cmd  = 'g++ -c -std=c++11 -stdlib=libc++';
+        var cmd  = 'g++ -Wall -std=c++11 -stdlib=libc++';
         var opts = [];
         var done = this.async();
         var options = this.options({
-            flags: []
+            flags: [],
+            compileOnly: false,
+            verbose: false
         });
+
+        if ( options.compileOnly === true ) {
+            cmd += ' -c';
+        }
+        if ( options.verbose === true ) {
+            cmd += ' -v';
+        }
 
         options.flags.forEach(function(flag) {
             opts.push(flag);
@@ -22,7 +31,7 @@ module.exports = function(grunt) {
             opts.push('-I ' + path.resolve(process.cwd(), lib));
         });
 
-        cmd = cmd + ' ' + opts.join(' ') + ' ' + main + ' -o ' + dest;
+        cmd = cmd + ' ' + opts.join(' ') + ' ' + main.join(' ') + ' -o ' + dest;
 
         grunt.log.writeln('Compile command: ' + cmd);
 

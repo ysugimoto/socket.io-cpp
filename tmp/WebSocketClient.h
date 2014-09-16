@@ -1,21 +1,22 @@
 /**
- * WebSocket connection library
+ * WebSocketClient connection library
  */
 #ifndef _WEBSOCKET_LIB_H_
 #define _WEBSOCKET_LIB_H_
 
-#include "libwebsockets.h"
+#include <libwebsockets.h>
 #include <string>
 #include <vector>
 #include <functional>
 
-class WebSocketUtil;
+class WebSocketClientUtil;
 
-class WebSocket
+class WebSocketClient
 {
+
 public:
-    WebSocket();
-    ~WebSocket();
+    WebSocketClient();
+    ~WebSocketClient();
 
     enum class State
     {
@@ -61,7 +62,7 @@ public:
     std::function<void()> onClose;
     std::function<void()> onOpen;
     std::function<void()> onError;
-    std::function<void(const WebSocket::Data *data)> onMessage;
+    std::function<void(const WebSocketClient::Data *data)> onMessage;
 
     int onSocketCallback(struct libwebsocket_context *ctx,
                          struct libwebsocket *wsi,
@@ -91,7 +92,7 @@ private:
     char*   _currentData;
     bool    _sslConnection;
 
-    WebSocketUtil* _websocketUtil;
+    WebSocketClientUtil* _websocketUtil;
 
     struct libwebsocket*           _websocket;
     struct libwebsocket_context*   _websocketContext;

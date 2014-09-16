@@ -1,0 +1,123 @@
+Performing C SOURCE FILE Test HAVE_inline failed with the following output:
+Change Dir: /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec508539752/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec508539752.dir/build.make CMakeFiles/cmTryCompileExec508539752.dir/build
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_progress_report /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec508539752.dir/src.c.o
+/usr/bin/cc  -DKEYWORD=inline -DHAVE_inline   -o CMakeFiles/cmTryCompileExec508539752.dir/src.c.o   -c /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec508539752
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec508539752.dir/link.txt --verbose=1
+/usr/bin/cc   -DHAVE_inline -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTryCompileExec508539752.dir/src.c.o  -o cmTryCompileExec508539752  
+Undefined symbols for architecture x86_64:
+  "_a", referenced from:
+      _main in src.c.o
+ld: symbol(s) not found for architecture x86_64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[3]: *** [cmTryCompileExec508539752] Error 1
+make[2]: *** [cmTryCompileExec508539752/fast] Error 2
+
+Source file was:
+
+		#include <stdio.h>
+		KEYWORD void a() {}
+		int main(int argc, char **argv) { a(); return 0; }
+		
+Performing C SOURCE FILE Test HAVE___inline__ failed with the following output:
+Change Dir: /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2755490974/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2755490974.dir/build.make CMakeFiles/cmTryCompileExec2755490974.dir/build
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_progress_report /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2755490974.dir/src.c.o
+/usr/bin/cc  -DKEYWORD=__inline__ -DHAVE___inline__   -o CMakeFiles/cmTryCompileExec2755490974.dir/src.c.o   -c /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec2755490974
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2755490974.dir/link.txt --verbose=1
+/usr/bin/cc   -DHAVE___inline__ -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTryCompileExec2755490974.dir/src.c.o  -o cmTryCompileExec2755490974  
+Undefined symbols for architecture x86_64:
+  "_a", referenced from:
+      _main in src.c.o
+ld: symbol(s) not found for architecture x86_64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[3]: *** [cmTryCompileExec2755490974] Error 1
+make[2]: *** [cmTryCompileExec2755490974/fast] Error 2
+
+Source file was:
+
+		#include <stdio.h>
+		KEYWORD void a() {}
+		int main(int argc, char **argv) { a(); return 0; }
+		
+Performing C SOURCE FILE Test HAVE___inline failed with the following output:
+Change Dir: /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1398256447/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1398256447.dir/build.make CMakeFiles/cmTryCompileExec1398256447.dir/build
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_progress_report /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1398256447.dir/src.c.o
+/usr/bin/cc  -DKEYWORD=__inline -DHAVE___inline   -o CMakeFiles/cmTryCompileExec1398256447.dir/src.c.o   -c /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec1398256447
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1398256447.dir/link.txt --verbose=1
+/usr/bin/cc   -DHAVE___inline -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTryCompileExec1398256447.dir/src.c.o  -o cmTryCompileExec1398256447  
+Undefined symbols for architecture x86_64:
+  "_a", referenced from:
+      _main in src.c.o
+ld: symbol(s) not found for architecture x86_64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[3]: *** [cmTryCompileExec1398256447] Error 1
+make[2]: *** [cmTryCompileExec1398256447/fast] Error 2
+
+Source file was:
+
+		#include <stdio.h>
+		KEYWORD void a() {}
+		int main(int argc, char **argv) { a(); return 0; }
+		
+Determining if the include file in6addr.h exists failed with the following output:
+Change Dir: /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1014044110/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1014044110.dir/build.make CMakeFiles/cmTryCompileExec1014044110.dir/build
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_progress_report /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1014044110.dir/CheckIncludeFile.c.o
+/usr/bin/cc  -DKEYWORD=__inline  -o CMakeFiles/cmTryCompileExec1014044110.dir/CheckIncludeFile.c.o   -c /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: 'in6addr.h' file not found
+#include <in6addr.h>
+         ^
+1 error generated.
+make[3]: *** [CMakeFiles/cmTryCompileExec1014044110.dir/CheckIncludeFile.c.o] Error 1
+make[2]: *** [cmTryCompileExec1014044110/fast] Error 2
+
+
+Determining if the include file sys/prctl.h exists failed with the following output:
+Change Dir: /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec255857121/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec255857121.dir/build.make CMakeFiles/cmTryCompileExec255857121.dir/build
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_progress_report /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec255857121.dir/CheckIncludeFile.c.o
+/usr/bin/cc  -DKEYWORD=__inline  -o CMakeFiles/cmTryCompileExec255857121.dir/CheckIncludeFile.c.o   -c /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: 'sys/prctl.h' file not found
+#include <sys/prctl.h>
+         ^
+1 error generated.
+make[3]: *** [CMakeFiles/cmTryCompileExec255857121.dir/CheckIncludeFile.c.o] Error 1
+make[2]: *** [cmTryCompileExec255857121/fast] Error 2
+
+
+Determining if the include file vfork.h exists failed with the following output:
+Change Dir: /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec367324617/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec367324617.dir/build.make CMakeFiles/cmTryCompileExec367324617.dir/build
+/usr/local/Cellar/cmake/2.8.12.2/bin/cmake -E cmake_progress_report /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec367324617.dir/CheckIncludeFile.c.o
+/usr/bin/cc  -DKEYWORD=__inline  -o CMakeFiles/cmTryCompileExec367324617.dir/CheckIncludeFile.c.o   -c /Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: 'vfork.h' file not found
+#include <vfork.h>
+         ^
+1 error generated.
+make[3]: *** [CMakeFiles/cmTryCompileExec367324617.dir/CheckIncludeFile.c.o] Error 1
+make[2]: *** [cmTryCompileExec367324617/fast] Error 2
+
+

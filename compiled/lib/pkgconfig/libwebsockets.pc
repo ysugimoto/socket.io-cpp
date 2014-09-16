@@ -1,0 +1,11 @@
+prefix="/Users/A40154/works/socket.io-cpp/compiled"
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libwebsockets
+Description: Websockets server and client library
+Version: 1.3
+
+Libs: -L${libdir} -lwebsockets
+Cflags: -I${includedir}

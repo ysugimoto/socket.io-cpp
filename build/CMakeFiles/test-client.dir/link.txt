@@ -1,0 +1,1 @@
+/usr/bin/cc   -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/test-client.dir/test-server/test-client.c.o  -o bin/libwebsockets-test-client  lib/libwebsockets.a /usr/lib/libz.dylib /usr/lib/libssl.dylib /usr/lib/libcrypto.dylib -lm 

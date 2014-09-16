@@ -1,0 +1,9 @@
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/dist.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/test-client.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/test-echo.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/test-fraggle.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/test-ping.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/test-server.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/test-server-extpoll.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/websockets.dir
+/Users/A40154/works/socket.io-cpp/build/CMakeFiles/websockets_shared.dir

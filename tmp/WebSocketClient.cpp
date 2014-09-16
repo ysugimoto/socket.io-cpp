@@ -1,39 +1,42 @@
 /**
- * WebSocket connection library
+ * WebSocketClient connection library
  */
 #ifndef _WEBSOCKET_LIB_CPP_
 #define _WEBSOCKET_LIB_CPP_
 
-#include "WebSocket.h"
+#include "WebSocketClient.h"
 #include <iterator>
 #include <list>
 #include <thread>
 #include <mutex>
 #include <queue>
+#include <iostream>
+#include <stdio.h>
 
 #define WEBSOCKET_WRITE_BUFFER_SIZE 2048
 
 using namespace std;
 
+WebSocketClientUtil *s_websocketClientUtil;
+
 // ================ WebSokcet Utility Class =========================
-class WebSocketUtil
+class WebSocketClientUtil
 {
 private:
-    static WebSocketUtil *_inst;
-    WebSocket* _ws;
+    WebSocketClient* _ws;
     std::thread* _subThread;
     bool _needQuit;
 
 public:
-    WebSocketUtil();
-    ~WebSocketUtil();
+    WebSocketClientUtil();
+    ~WebSocketClientUtil();
 
-    std::mutex _UIWebSocketMessageQueueMutex;
-    std::mutex _subThreadWebSocketMessageQueueMutex;
-    std::list<WebSocket::Message*> *_UIWebSocketMessageQueue;
-    std::list<WebSocket::Message*> *_subThreadWebSocketMessageQueue;
+    std::mutex _UIWebSocketClientMessageQueueMutex;
+    std::mutex _subThreadWebSocketClientMessageQueueMutex;
+    std::list<WebSocketClient::Message*> *_UIWebSocketClientMessageQueue;
+    std::list<WebSocketClient::Message*> *_subThreadWebSocketClientMessageQueue;
 
-    static WebSocketUtil* getInstance();
+    static WebSocketClientUtil* getInstance();
     static int wrapOnSocketCallback(struct libwebsocket_context *ctx,
                                     struct libwebsocket *wsi,
                                     enum libwebsocket_callback_reasons reason,
@@ -41,7 +44,7 @@ public:
                                     void *in,
                                     size_t len)
     {
-        WebSocket *ws = (WebSocket*)libwebsocket_context_user(ctx);
+        WebSocketClient *ws = (WebSocketClient*)libwebsocket_context_user(ctx);
         if ( ws )
         {
             return ws->onSocketCallback(ctx, wsi, reason, user, in, len);
@@ -49,32 +52,32 @@ public:
         return 0;
     }
 
-    bool createThread(WebSocket* ws);
+    bool createThread(WebSocketClient* ws);
     void entryThread();
     void quitSubThread();
     void joinThreads();
 
-    // thread messing
-    void sendToUIThread(WebSocket::Message *msg);
-    void sendToSubThread(WebSocket::Message *msg);
+    // thread messaging
+    void sendToUIThread(WebSocketClient::Message *msg);
+    void sendToSubThread(WebSocketClient::Message *msg);
 
     // schedule update
     void updateHandler(float delta);
 };
 
-WebSocketUtil::WebSocketUtil():
+WebSocketClientUtil::WebSocketClientUtil():
     _ws(nullptr),
     _subThread(nullptr),
     _needQuit(false)
 {
-    _UIWebSocketMessageQueue = new std::list<WebSocket::Message*>();
-    _subThreadWebSocketMessageQueue = new std::list<WebSocket::Message*>();
+    _UIWebSocketClientMessageQueue = new std::list<WebSocketClient::Message*>();
+    _subThreadWebSocketClientMessageQueue = new std::list<WebSocketClient::Message*>();
 
     // set schedule
 
 }
 
-WebSocketUtil::~WebSocketUtil()
+WebSocketClientUtil::~WebSocketClientUtil()
 {
     // unschedule
     joinThreads();
@@ -83,30 +86,33 @@ WebSocketUtil::~WebSocketUtil()
         // relase mem
     }
 
-    delete _UIWebSocketMessageQueue;
-    delete _subThreadWebSocketMessageQueue;
+    delete _UIWebSocketClientMessageQueue;
+    delete _subThreadWebSocketClientMessageQueue;
 }
 
-WebSocketUtil* WebSocketUtil::getInstance()
+WebSocketClientUtil* WebSocketClientUtil::getInstance()
 {
-    if ( ! _inst )
+    if ( ! s_websocketClientUtil )
     {
-        _inst = new WebSocketUtil();
+        s_websocketClientUtil = new WebSocketClientUtil();
     }
 
-    return _inst;
+    return s_websocketClientUtil;
 }
 
-bool WebSocketUtil::createThread(WebSocket* ws)
+bool WebSocketClientUtil::createThread(WebSocketClient* ws)
 {
-    _ws = ws;//const_cast<WebSocket*>(ws);
-    _subThread = new std::thread(&WebSocketUtil::entryThread, this);
+    _ws = ws;//const_cast<WebSocketClient*>(ws);
+    _subThread = new std::thread(&WebSocketClientUtil::entryThread, this);
+
+    cout << "create thread" << endl;
 
     return true;
 }
 
-void WebSocketUtil::entryThread()
+void WebSocketClientUtil::entryThread()
 {
+    cout << "thread entry" << endl;
     _ws->onSubThreadStarted();
 
     while ( !_needQuit )
@@ -118,24 +124,24 @@ void WebSocketUtil::entryThread()
     }
 }
 
-void WebSocketUtil::quitSubThread()
+void WebSocketClientUtil::quitSubThread()
 {
     _needQuit = true;
 }
 
-void WebSocketUtil::sendToUIThread(WebSocket::Message *msg)
+void WebSocketClientUtil::sendToUIThread(WebSocketClient::Message *msg)
 {
-    std::lock_guard<std::mutex> lk(_UIWebSocketMessageQueueMutex);
-    _UIWebSocketMessageQueue->push_back(msg);
+    std::lock_guard<std::mutex> lk(_UIWebSocketClientMessageQueueMutex);
+    _UIWebSocketClientMessageQueue->push_back(msg);
 }
 
-void WebSocketUtil::sendToSubThread(WebSocket::Message *msg)
+void WebSocketClientUtil::sendToSubThread(WebSocketClient::Message *msg)
 {
-    std::lock_guard<std::mutex> lk(_subThreadWebSocketMessageQueueMutex);
-    _subThreadWebSocketMessageQueue->push_back(msg);
+    std::lock_guard<std::mutex> lk(_subThreadWebSocketClientMessageQueueMutex);
+    _subThreadWebSocketClientMessageQueue->push_back(msg);
 }
 
-void WebSocketUtil::joinThreads()
+void WebSocketClientUtil::joinThreads()
 {
     if ( _subThread->joinable() )
     {
@@ -143,21 +149,21 @@ void WebSocketUtil::joinThreads()
     }
 }
 
-void WebSocketUtil::updateHandler(float delta)
+void WebSocketClientUtil::updateHandler(float delta)
 {
-    WebSocket::Message *msg = nullptr;
-    _UIWebSocketMessageQueueMutex.lock();
+    WebSocketClient::Message *msg = nullptr;
+    _UIWebSocketClientMessageQueueMutex.lock();
 
-    if ( _UIWebSocketMessageQueue->size() == 0 )
+    if ( _UIWebSocketClientMessageQueue->size() == 0 )
     {
-        _UIWebSocketMessageQueueMutex.unlock();
+        _UIWebSocketClientMessageQueueMutex.unlock();
         return;
     }
 
-    msg = *(_UIWebSocketMessageQueue->begin());
-    _UIWebSocketMessageQueue->pop_front();
+    msg = *(_UIWebSocketClientMessageQueue->begin());
+    _UIWebSocketClientMessageQueue->pop_front();
 
-    _UIWebSocketMessageQueueMutex.unlock();
+    _UIWebSocketClientMessageQueueMutex.unlock();
 
     if ( _ws )
     {
@@ -172,13 +178,13 @@ void WebSocketUtil::updateHandler(float delta)
 }
 
 
-// ================ WebSocket Management Class =======================
+// ================ WebSocketClient Management Class =======================
 
-WebSocket::WebSocket():
+WebSocketClient::WebSocketClient():
 _readyState(State::INITIALIZE),
 _port(80),
-_host(nullptr),
-_path(nullptr),
+_host(""),
+_path(""),
 _pendingFrameDataLength(0),
 _currentDataLength(0),
 _currentData(nullptr),
@@ -189,7 +195,7 @@ _websocketProtocols(nullptr)
 {
 }
 
-WebSocket::~WebSocket()
+WebSocketClient::~WebSocketClient()
 {
     close();
     // delete callbacks
@@ -208,9 +214,13 @@ WebSocket::~WebSocket()
     // TODO: util safe release
 }
 
-bool WebSocket::connect(const string& url, const vector<string>* protocols)
+bool WebSocketClient::connect(const string& url, const vector<string>* protocols)
 {
     parseUrl(url);
+
+    cout << _host << endl;
+    cout << _port << endl;
+    cout << _path << endl;
 
     size_t protocolCount = 0;
     if ( protocols && protocols->size() > 0 )
@@ -233,7 +243,7 @@ bool WebSocket::connect(const string& url, const vector<string>* protocols)
             char* name = new char[(*iter).length()+1];
             strcpy(name, (*iter).c_str());
             _websocketProtocols[i].name = name;
-            _websocketProtocols[i].callback = WebSocketUtil::wrapOnSocketCallback;
+            _websocketProtocols[i].callback = WebSocketClientUtil::wrapOnSocketCallback;
         }
     }
     else
@@ -241,14 +251,14 @@ bool WebSocket::connect(const string& url, const vector<string>* protocols)
         char* name = new char[20];
         strcpy(name, "default-protocol");
         _websocketProtocols[0].name = name;
-        _websocketProtocols[0].callback = WebSocketUtil::wrapOnSocketCallback;
+        _websocketProtocols[0].callback = WebSocketClientUtil::wrapOnSocketCallback;
     }
 
-    _websocketUtil = WebSocketUtil::getInstance();
+    _websocketUtil = WebSocketClientUtil::getInstance();
     return _websocketUtil->createThread(this);
 }
 
-void WebSocket::send(const string& message)
+void WebSocketClient::send(const string& message)
 {
     if ( _readyState != State::OPEN )
     {
@@ -266,7 +276,7 @@ void WebSocket::send(const string& message)
     _websocketUtil->sendToSubThread(msg);
 }
 
-void WebSocket::close()
+void WebSocketClient::close()
 {
     if ( _readyState == State::CLOSING || _readyState == State::CLOSED )
     {
@@ -282,13 +292,14 @@ void WebSocket::close()
     }
 }
 
-WebSocket::State WebSocket::getReadyState()
+WebSocketClient::State WebSocketClient::getReadyState()
 {
     return _readyState;
 }
 
-int WebSocket::onSubThreadLoop()
+int WebSocketClient::onSubThreadLoop()
 {
+    cout << "loop" << endl;
     if ( _readyState == State::CLOSED || _readyState == State::CLOSING )
     {
         libwebsocket_context_destroy(_websocketContext);
@@ -305,10 +316,12 @@ int WebSocket::onSubThreadLoop()
     return 0;
 }
 
-void WebSocket::onSubThreadStarted()
+void WebSocketClient::onSubThreadStarted()
 {
     struct lws_context_creation_info info;
     memset(&info, 0, sizeof info);
+
+    cout << "thread started" << endl;
 
     info.port = CONTEXT_PORT_NO_LISTEN;
     info.protocols = _websocketProtocols;
@@ -348,11 +361,11 @@ void WebSocket::onSubThreadStarted()
     }
 }
 
-void WebSocket::onSubTheadEnded()
+void WebSocketClient::onSubTheadEnded()
 {
 }
 
-int WebSocket::onSocketCallback(struct libwebsocket_context *ctx,
+int WebSocketClient::onSocketCallback(struct libwebsocket_context *ctx,
                                 struct libwebsocket *wsi,
                                 int reason,
                                 void *user,
@@ -398,10 +411,10 @@ int WebSocket::onSocketCallback(struct libwebsocket_context *ctx,
             break;
         case LWS_CALLBACK_CLIENT_WRITEABLE:
             {
-                std::lock_guard<std::mutex> lk(_websocketUtil->_subThreadWebSocketMessageQueueMutex);
-                std::list<Message*>::iterator iter = _websocketUtil->_subThreadWebSocketMessageQueue->begin();
+                std::lock_guard<std::mutex> lk(_websocketUtil->_subThreadWebSocketClientMessageQueueMutex);
+                std::list<Message*>::iterator iter = _websocketUtil->_subThreadWebSocketClientMessageQueue->begin();
                 int bytesWrite = 0;
-                for (; iter != _websocketUtil->_subThreadWebSocketMessageQueue->end();)
+                for (; iter != _websocketUtil->_subThreadWebSocketClientMessageQueue->end();)
                 {
                     Message *threadMessage = *iter;
 
@@ -464,7 +477,7 @@ int WebSocket::onSocketCallback(struct libwebsocket_context *ctx,
                         delete[] (buf);
                         buf = nullptr;
 
-                        _websocketUtil->_subThreadWebSocketMessageQueue->erase(iter++);
+                        _websocketUtil->_subThreadWebSocketClientMessageQueue->erase(iter++);
 
                         delete (threadMessage);
                         threadMessage = nullptr;
@@ -555,8 +568,9 @@ int WebSocket::onSocketCallback(struct libwebsocket_context *ctx,
     return 0;
 }
 
-void WebSocket::onUIThreadReceiveMessage(WebSocket::Message *msg)
+void WebSocketClient::onUIThreadReceiveMessage(WebSocketClient::Message *msg)
 {
+    cout << "receive message" << endl;
     switch (msg->what)
     {
         case WEBSOCKET_MESSAGE_TO_UITHREAD_OPEN:
@@ -600,6 +614,58 @@ void WebSocket::onUIThreadReceiveMessage(WebSocket::Message *msg)
         default:
             break;
         }
+}
+
+void WebSocketClient::parseUrl(const string &url)
+{
+    bool ret = false;
+    bool useSSL = false;
+    string host = url;
+    size_t pos = 0;
+    int port = 80;
+
+    // ws://
+    pos = host.find("ws://");
+    if (pos == 0)
+    {
+        host.erase(0,5);
+    }
+
+    // wss://
+    pos = host.find("wss://");
+    if (pos == 0)
+    {
+        host.erase(0,6);
+        useSSL = true;
+    }
+
+    pos = host.find(":");
+    if (pos != string::npos)
+    {
+        port = atoi(host.substr(pos+1, host.size()).c_str());
+    }
+
+    pos = host.find("/", 0);
+    string path = "/";
+    if (pos != string::npos)
+    {
+        path += host.substr(pos + 1, host.size());
+    }
+
+    pos = host.find(":");
+    if(pos != string::npos)
+    {
+        host.erase(pos, host.size());
+    }
+    else if((pos = host.find("/")) != string::npos)
+    {
+        host.erase(pos, host.size());
+    }
+
+    _host = host;
+    _port = port;
+    _path = path;
+    _sslConnection = useSSL ? 1 : 0;
 }
 
 #endif // _WEBSOCKET_LIB_CPP_

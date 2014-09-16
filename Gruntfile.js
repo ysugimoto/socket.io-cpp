@@ -5,23 +5,30 @@ module.exports = function(grunt) {
     grunt.initConfig({
         compile: {
             ws: {
-                main: 'src/WebSocket.cpp',
-                dest: 'socket.io.o',
+                options: {
+                    compileOnly: true
+                },
+                main: ['src/WebSocket.cpp'],
+                dest: 'compiled/WebSocket.o',
                 links: [
                     'lib/libwebsockets/lib'
-                    //'lib/websocketpp/*.hpp',
-                    //'lib/websocketpp/*.cpp',
-                    //'lib/websocketpp/**/*.h',
-                    //'lib/websocketpp/**/*.hpp',
-                    //'lib/websocketpp/**/*.cpp',
-                    //'lib/rapidjson/include/rapidjson/**/*'
-                    //'lib/rapidjson/include/rapidjson/*.h'
-                    //'lib/rapidjson/include/rapidjson/internal/*.h'
+                ]
+            },
+            run: {
+                options: {
+                    verbose: false
+                },
+                main: ['test/main.cpp', 'tmp/WebSocketClient.cpp'],
+                dest: 'socket.io',
+                links: [
+                    'lib/libwebsockets/lib',
+                    'tmp'
                 ]
             }
         }
     });
 
-    grunt.registerTask('default', ['compile']);
+    grunt.registerTask('default', ['compile:ws']);
+    grunt.registerTask('run', ['compile:run']);
 
 };

@@ -1,0 +1,1 @@
+/usr/bin/cc   -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/test-ping.dir/test-server/test-ping.c.o  -o bin/libwebsockets-test-ping  lib/libwebsockets.a /usr/lib/libz.dylib /usr/lib/libssl.dylib /usr/lib/libcrypto.dylib -lm 
